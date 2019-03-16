@@ -1,0 +1,21 @@
+---
+# defaults file for tamay.mariadb
+
+# Password of root user. Will be generated if left empty
+mariadb_root_password: ''
+
+# List of databases to create
+mariadb_databases: []
+# Example:
+#mariadb_databases:
+#  - database1
+#  - database2
+
+# List of users with privileges to create
+mariadb_database_users: []
+# Example:
+#mariadb_database_users:
+#  - name: user1
+#    password: test
+#    host: 192.168.1.5
+#    priv: '*.*:ALL,GRANT'

@@ -1,0 +1,80 @@
+---
+# tasks file for tamay.mariadb
+
+- name: "Install mariadb"
+  package:
+    state: present
+    name:
+      - mariadb-server
+      - MySQL-python
+
+- name: "Start and enable mariadb"
+  service:
+    name: mariadb
+    state: started
+    enabled: true
+
+- name: "Check if /root/.my.cnf exists"
+  stat:
+    path: /root/.my.cnf
+  register: _mariadb_my_cnf
+
+- name: "Generate a password for root"
+  set_fact:
+    mariadb_root_password: "{{ lookup('password', '/tmp/' + ansible_fqdn + '/mariadb_root_password' ) }}"
+  when: mariadb_root_password == ''
+
+- name: "Update root password"
+  mysql_user:
+    name: root
+    host_all: yes
+    password: "{{ mariadb_root_password }}"
+    update_password: always
+    priv: "*.*:ALL,GRANT"
+    login_user: root
+    login_password: ""
+    state: present
+  when: not _mariadb_my_cnf.stat.exists
+
+- name: "Copy new password to /root/.my.cnf"
+  template:
+    src: my.cnf.j2
+    dest: /root/.my.cnf
+    owner: root
+    group: root
+    mode: 0600
+  when: not _mariadb_my_cnf.stat.exists
+
+- name: "Removes all anonymous user accounts"
+  mysql_user:
+    name: ""
+    host_all: yes
+    state: absent
+
+- name: "Remove test database"
+  mysql_db:
+    name: test
+    state: absent
+
+- name: "Download mysqltuner"
+  get_url:
+    url: http://mysqltuner.pl/
+    dest: /usr/local/bin/mysqltuner
+    owner: root
+    group: root
+    mode: 0750
+
+- name: "Create databases"
+  mysql_db:
+    state: present
+    name: "{{ item }}"
+  loop: "{{ mariadb_databases }}"
+
+- name: "Create database users"
+  mysql_user:
+    state: present
+    name: "{{ item.name }}"
+    password: "{{ item.password | default('') }}"
+    host: "{{ item.host | default('localhost') }}"
+    priv: "{{ item.priv | default(omit) }}"
+  loop: "{{ mariadb_database_users }}"
