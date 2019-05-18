@@ -1,7 +1,7 @@
 ---
 # tasks file for tamay.mariadb
 
-- name: "Add MariaDB repository"
+- name: "Add MariaDB {{ mariadb_version }} repository"
   yum_repository:
     name: mariadb
     description: MariaDB {{ mariadb_version }} repository
@@ -10,7 +10,7 @@
     gpgcheck: yes
   when: mariadb_version != 'default'
 
-- name: "Set mariadb package names"
+- name: "Set mariadb package names for default version"
   set_fact:
     mariadb_packages:
     - mariadb-server
@@ -18,7 +18,7 @@
     - MySQL-python
   when: mariadb_version == 'default'
 
-- name: "Set mariadb package names"
+- name: "Set mariadb package names for mariadb.org repository"
   set_fact:
     mariadb_packages:
       - MariaDB-server
