@@ -31,6 +31,15 @@
     state: present
     name: "{{ mariadb_packages }}"
 
+- name: "Configure /etc/my.cnf.d/server.conf"
+  template:
+    src: server.cnf.j2
+    dest: /etc/my.cnf.d/server.cnf
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart_mariadb
+
 - name: "Start and enable mariadb"
   service:
     name: mariadb

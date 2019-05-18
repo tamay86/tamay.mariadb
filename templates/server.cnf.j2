@@ -1,0 +1,20 @@
+# {{ ansible_managed }}
+#
+# These groups are read by MariaDB server.
+# Use it for options that only the server (but not clients) should see
+#
+# See the examples of server my.cnf files in /usr/share/mysql/
+#
+
+{% for item in mariadb_config %}
+[{{ item.section }}]
+{% for (key,value) in item.options.items() | list %}
+{% if value == '' %}
+{{ key }}
+{% else %}
+{{ key }}={{ value }}
+{% endif %}
+{% endfor %}
+
+{% endfor %}
+

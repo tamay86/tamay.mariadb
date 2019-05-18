@@ -25,6 +25,22 @@ Defines the version of MariaDB, that will be installed. Either use ```default```
     mariadb_root_password: ''
 
 MariaDB password for root user. Ansible generate one, if this value is left empty.
+
+    # Configures section in /etc/my.cnf.d/server.cnf
+    # Possible sections are: 'server', 'mysqld', 'embedded', 'mariadb', and more
+    mariadb_config: []
+    # Example:
+    #mariadb_config:
+    #  - section: server
+    #    options:
+    #      bind-address: 127.0.0.1
+    #  - section: mysqld
+    #    options:
+    #      innodb_large_prefix: OFF
+    #      innodb_file_format: Barracuda
+    #      innodb_file_per_table: ON
+
+```mariadb_config``` is a variable, that is used to configure ```/etc/my.cnf.d/server.cnf```. For every section you can define the options you want. If there is an option without a value, you can just use an empty string.
     
     # List of databases to create
     mariadb_databases: []
@@ -55,12 +71,23 @@ None.
 Example Playbook
 ----------------
 
+- Install MariaDB version 10.1
+- Use predefined password for root
+- Configure MariaDB to only listen on localhost
+- Create Databases and Users
+
+
     ---
     
     - hosts: all
     
       vars:
+        mariadb_version: '10.1'
         mariadb_root_password: 'tohQu5uloogee3Ch'
+        mariadb_config:
+          - section: server
+            options:
+              bind-address: 127.0.0.1
         mariadb_databases:
           - database1
           - database2

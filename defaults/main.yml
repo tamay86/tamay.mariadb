@@ -10,6 +10,20 @@ mariadb_version: 'default'
 # Password of root user. Will be generated if left empty
 mariadb_root_password: ''
 
+# Configures section in /etc/my.cnf.d/server.cnf
+# Possible sections are: 'server', 'mysqld', 'embedded', 'mariadb', and more
+mariadb_config: []
+# Example:
+#mariadb_config:
+#  - section: server
+#    options:
+#      bind-address: 127.0.0.1
+#  - section: mysqld
+#    options:
+#      innodb_large_prefix: OFF
+#      innodb_file_format: Barracuda
+#      innodb_file_per_table: ON
+
 # List of databases to create
 mariadb_databases: []
 # Example:

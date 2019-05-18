@@ -6,6 +6,18 @@
 
   vars:
     mariadb_version: "10.2"
+
+    mariadb_config:
+      - section: server
+        options:
+          bind-address: 127.0.0.1
+      - section: mysqld
+        options:
+          innodb_large_prefix: OFF
+          innodb_file_format: Barracuda
+          innodb_file_per_table: ON
+          innodb_flush_sync: OFF
+
     mariadb_databases:
       - database1
       - database2

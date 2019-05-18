@@ -1,0 +1,8 @@
+---
+# handlers file for tamay.mariadb
+
+- name: "Restart mariadb"
+  service:
+    name: mariadb
+    state: restarted
+  listen: restart_mariadb
