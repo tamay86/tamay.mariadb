@@ -1,12 +1,35 @@
 ---
 # tasks file for tamay.mariadb
 
+- name: "Add MariaDB repository"
+  yum_repository:
+    name: mariadb
+    description: MariaDB {{ mariadb_version }} repository
+    baseurl: http://yum.mariadb.org/{{ mariadb_version }}/centos7-amd64
+    gpgkey: https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+    gpgcheck: yes
+  when: mariadb_version != 'default'
+
+- name: "Set mariadb package names"
+  set_fact:
+    mariadb_packages:
+    - mariadb-server
+    - mariadb
+    - MySQL-python
+  when: mariadb_version == 'default'
+
+- name: "Set mariadb package names"
+  set_fact:
+    mariadb_packages:
+      - MariaDB-server
+      - MariaDB-client
+      - MySQL-python
+  when: mariadb_version != 'default'
+
 - name: "Install mariadb"
   package:
     state: present
-    name:
-      - mariadb-server
-      - MySQL-python
+    name: "{{ mariadb_packages }}"
 
 - name: "Start and enable mariadb"
   service:

@@ -5,6 +5,7 @@
   become: yes
 
   vars:
+    mariadb_version: "10.2"
     mariadb_databases:
       - database1
       - database2

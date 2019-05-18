@@ -13,6 +13,14 @@ Role Variables
 
 List of all variables, including default values.
 
+    # Version of mariadb to be installed
+    # 'default' will use the version in the default repository
+    # Other versions will use the repository from mariadb.org
+    # Possible values: 'default', '10.0', '10.1', '10.2', '10.3'
+    mariadb_version: 'default'
+
+Defines the version of MariaDB, that will be installed. Either use ```default``` for MariaDB packages from the system repository, or use a version number to install this version from the mariadb.org repository. 
+
     # Password of root user. Will be generated if left empty
     mariadb_root_password: ''
 
